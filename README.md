@@ -9,7 +9,7 @@ yiya_ai_reader/
 ├── server/              # 后端 API (FastAPI)
 ├── admin-web/           # 管理后台 (Vue3)
 ├── miniprogram/         # 微信小程序
-├── docs/                # 文档
+├── docs/                # 文档3
 └── deploy/              # 部署配置
 ```
 
