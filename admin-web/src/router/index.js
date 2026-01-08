@@ -45,39 +45,46 @@ router.beforeEach(async (to, from, next) => {
         }
     } else {
         // 需要登录
+        console.log('[Router] Checking token...')
         if (!token) {
+            console.log('[Router] No token, redirecting to login')
             next('/login')
             return
         }
 
         // 添加动态路由
         if (!dynamicRoutesAdded && authStore.menus.length > 0) {
+            console.log('[Router] Adding dynamic routes from existing menus')
             try {
                 addDynamicRoutes(authStore.menus)
                 dynamicRoutesAdded = true
-                // 重新导航到目标路由
                 next({ ...to, replace: true })
             } catch (error) {
-                console.error('添加动态路由失败:', error)
-                ElMessage.error('加载菜单失败')
+                console.error('[Router] Failed to add dynamic routes:', error)
                 next('/login')
             }
         } else if (!dynamicRoutesAdded) {
+            console.log('[Router] Fetching menus...')
             // 还没有菜单数据,先获取
             try {
                 await authStore.getMenus()
+                console.log('[Router] Menus fetched, count:', authStore.menus.length)
                 if (authStore.menus.length > 0) {
                     addDynamicRoutes(authStore.menus)
                     dynamicRoutesAdded = true
                     next({ ...to, replace: true })
                 } else {
-                    next()
+                    console.warn('[Router] No menus found, redirecting to login')
+                    authStore.logout()
+                    next('/login')
                 }
             } catch (error) {
-                console.error('获取菜单失败:', error)
-                next()
+                console.error('[Router] Failed to fetch menus:', error)
+                authStore.logout()
+                next('/login')
             }
         } else {
+            console.log('[Router] Request passed')
             next()
         }
     }

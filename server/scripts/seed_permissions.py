@@ -13,7 +13,9 @@ from sqlalchemy.orm import selectinload
 from app.db.session import AsyncSessionLocal
 from app.models.role import AdminRole
 from app.models.permission import AdminPermission
+from app.models.menu import AdminMenu
 from app.models.user import AdminUser
+from app.core.config import settings
 
 
 async def seed_roles():
@@ -142,7 +144,7 @@ async def assign_super_admin_role():
     """给管理员用户分配超级管理员角色"""
     async with AsyncSessionLocal() as db:
         try:
-            admin_username = os.environ.get("ADMIN_USERNAME")
+            admin_username = settings.ADMIN_USERNAME
             if not admin_username:
                 print("未设置 ADMIN_USERNAME,无法分配超级管理员角色")
                 return

@@ -65,6 +65,11 @@ class Settings(BaseSettings):
     WECHAT_APPID: str = ""
     WECHAT_SECRET: str = ""
 
+    # 管理员初始化配置
+    ADMIN_USERNAME: str = ""
+    ADMIN_PASSWORD: str = ""
+
+
     @field_validator("SECRET_KEY")
     @classmethod
     def validate_secret_key(cls, value: str) -> str:

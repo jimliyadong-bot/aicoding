@@ -8,7 +8,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
-import router from '@/router'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -63,17 +62,32 @@ request.interceptors.response.use(
                         config.headers.Authorization = `Bearer ${newToken}`
 
                         // 重试所有待处理的请求
-                        requests.forEach(cb => cb(newToken))
+                        requests.forEach(({ resolve, config }) => {
+                            config.headers.Authorization = `Bearer ${newToken}`
+                            resolve(request(config))
+                        })
                         requests = []
 
                         // 重试当前请求
                         return request(config)
+                    } else {
+                        throw new Error('刷新 token 失败')
                     }
                 } catch (refreshError) {
                     // 刷新失败,清除登录状态并跳转登录页
                     const authStore = useAuthStore()
                     authStore.logout()
-                    router.push('/login')
+
+                    // 拒绝所有待处理的请求
+                    requests.forEach(({ reject }) => reject(refreshError))
+                    requests = []
+
+                    // 拒绝所有待处理的请求
+                    requests.forEach(({ reject }) => reject(refreshError))
+                    requests = []
+
+                    // 使用 window.location 跳转以避免循环依赖问题
+                    window.location.href = '/login'
                     ElMessage.error('登录已过期,请重新登录')
                     return Promise.reject(refreshError)
                 } finally {
@@ -81,11 +95,8 @@ request.interceptors.response.use(
                 }
             } else {
                 // 正在刷新 token,将请求加入队列
-                return new Promise(resolve => {
-                    requests.push(token => {
-                        config.headers.Authorization = `Bearer ${token}`
-                        resolve(request(config))
-                    })
+                return new Promise((resolve, reject) => {
+                    requests.push({ resolve, reject, config })
                 })
             }
         }

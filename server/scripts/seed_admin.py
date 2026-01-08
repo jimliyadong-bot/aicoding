@@ -11,19 +11,24 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from sqlalchemy import select
 from app.db.session import AsyncSessionLocal
 from app.models.user import AdminUser
+from app.models.role import AdminRole
+from app.models.permission import AdminPermission
+from app.models.menu import AdminMenu
 from app.utils.password import hash_password
 
+
+from app.core.config import settings
 
 async def seed_admin():
     """初始化管理员账号"""
     async with AsyncSessionLocal() as db:
         try:
-            admin_username = os.environ.get("ADMIN_USERNAME")
-            admin_password = os.environ.get("ADMIN_PASSWORD")
+            admin_username = settings.ADMIN_USERNAME
+            admin_password = settings.ADMIN_PASSWORD
             admin_real_name = os.environ.get("ADMIN_REAL_NAME", "超级管理员")
 
             if not admin_username or not admin_password:
-                raise RuntimeError("必须设置 ADMIN_USERNAME 和 ADMIN_PASSWORD 环境变量")
+                raise RuntimeError("必须设置 ADMIN_USERNAME 和 ADMIN_PASSWORD 环境变量(在 .env 文件中配置)")
 
             # 检查是否已存在管理员
             stmt = select(AdminUser).where(AdminUser.username == admin_username)

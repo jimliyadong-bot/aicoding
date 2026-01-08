@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
             return null
         } catch (error) {
             console.error('刷新 token 失败:', error)
-            return null
+            throw error
         }
     }
 
@@ -108,6 +108,7 @@ export const useAuthStore = defineStore('auth', () => {
             }
         } catch (error) {
             console.error('获取菜单失败:', error)
+            throw error // 抛出错误供调用方处理
         }
     }
 
