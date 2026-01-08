@@ -24,7 +24,7 @@ yiya_ai_reader/
 
 ### 本地启动
 
-#### 1. 克隆项目
+#### 1. 克隆项目3332
 
 ```bash
 git clone https://github.com/your-repo/yiya_ai_reader.git
