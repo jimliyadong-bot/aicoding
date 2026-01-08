@@ -37,11 +37,16 @@
 | 权限编码 | 说明 |
 |---|---|---|
 | `sys:user:list` | 查看用户列表 |
+| `sys:user:detail` | 查看用户详情 |
 | `sys:user:create` | 创建用户 |
 | `sys:user:update` | 更新用户 |
 | `sys:user:delete` | 删除用户 |
+| `sys:user:reset` | 重置用户密码 |
+| `sys:user:assign:role` | 分配用户角色 |
 | `sys:role:list` | 查看角色列表 |
-| `sys:role:assign` | 分配角色权限 |
+| `sys:role:detail` | 查看角色详情 |
+| `sys:role:assign:permission` | 分配角色权限 |
+| `sys:role:assign:menu` | 分配角色菜单 |
 | `sys:demo:view` | 查看示例(测试用) |
 
 ---
@@ -126,7 +131,7 @@ python -m app.main
 ```bash
 curl -X POST http://localhost:8000/api/v1/admin/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"username\":\"admin\",\"password\":\"admin123\"}"
+  -d "{\"username\":\"<ADMIN_USERNAME>\",\"password\":\"<ADMIN_PASSWORD>\"}"
 ```
 
 **保存 Token**:
@@ -178,14 +183,14 @@ INSERT INTO admin_user_role (user_id, role_id)
 VALUES ((SELECT id FROM admin_user WHERE username = 'user1'), 3);
 ```
 
-**密码**: admin123(与管理员相同,仅用于测试)
+**密码**: <USER_PASSWORD>(仅用于测试)
 
 #### 2.2 登录普通用户
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/admin/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"username\":\"user1\",\"password\":\"admin123\"}"
+  -d "{\"username\":\"user1\",\"password\":\"<USER_PASSWORD>\"}"
 ```
 
 **保存 Token**:
@@ -230,7 +235,7 @@ SELECT 3, id FROM admin_permission WHERE code = 'sys:demo:view';
 # 重新登录(刷新权限)
 curl -X POST http://localhost:8000/api/v1/admin/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"username\":\"user1\",\"password\":\"admin123\"}"
+  -d "{\"username\":\"user1\",\"password\":\"<USER_PASSWORD>\"}"
 
 export USER1_TOKEN="<new_access_token>"
 ```
@@ -317,9 +322,9 @@ async def get_users(
 ```python
 @router.get("/users")
 async def get_users(
-    current_user: AdminUser = Depends(require_any_perm("sys:user:list", "sys:user:view"))
+    current_user: AdminUser = Depends(require_any_perm("sys:user:list", "sys:user:detail"))
 ):
-    """需要 sys:user:list 或 sys:user:view 任意权限"""
+    """需要 sys:user:list 或 sys:user:detail 任意权限"""
     return {"users": []}
 ```
 

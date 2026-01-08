@@ -46,6 +46,7 @@ class UserInfoResponse(BaseModel):
     avatar: str | None = Field(None, description="头像URL")
     status: int = Field(..., description="状态: 0-禁用, 1-启用")
     created_at: datetime = Field(..., description="创建时间")
+    permissions: list[str] = Field(default_factory=list, description="权限列表")
     
     class Config:
         from_attributes = True

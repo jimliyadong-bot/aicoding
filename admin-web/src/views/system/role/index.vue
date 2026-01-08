@@ -24,8 +24,8 @@
         <el-table-column label="操作" width="350" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)" v-perm="'sys:role:update'">编辑</el-button>
-            <el-button type="warning" size="small" @click="handleAssignPermissions(row)" v-perm="'sys:role:assign'">绑定权限</el-button>
-            <el-button type="success" size="small" @click="handleAssignMenus(row)" v-perm="'sys:role:assign'">绑定菜单</el-button>
+            <el-button type="warning" size="small" @click="handleAssignPermissions(row)" v-perm="'sys:role:assign:permission'">绑定权限</el-button>
+            <el-button type="success" size="small" @click="handleAssignMenus(row)" v-perm="'sys:role:assign:menu'">绑定菜单</el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)" v-perm="'sys:role:delete'">删除</el-button>
           </template>
         </el-table-column>

@@ -67,7 +67,7 @@ npm run dev
 ### 1. 用户管理测试
 
 #### 1.1 查看用户列表
-1. 登录系统(admin/admin123)
+1. 登录系统(<ADMIN_USERNAME>/<ADMIN_PASSWORD>)
 2. 点击左侧菜单"系统管理" → "用户管理"
 3. 查看用户列表
 

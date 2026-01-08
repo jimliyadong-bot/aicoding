@@ -313,7 +313,7 @@ onMounted(() => {
 ```bash
 # 登录超级管理员
 curl -X POST http://localhost:8000/api/v1/admin/auth/login \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"<ADMIN_USERNAME>","password":"<ADMIN_PASSWORD>"}'
 
 # 获取我的菜单树
 curl -X GET http://localhost:8000/api/v1/admin/menus/my \
@@ -327,7 +327,7 @@ curl -X GET http://localhost:8000/api/v1/admin/menus/my \
 ```bash
 # 登录普通用户(需先创建)
 curl -X POST http://localhost:8000/api/v1/admin/auth/login \
-  -d '{"username":"user1","password":"admin123"}'
+  -d '{"username":"user1","password":"<USER_PASSWORD>"}'
 
 # 获取我的菜单树
 curl -X GET http://localhost:8000/api/v1/admin/menus/my \

@@ -182,9 +182,9 @@ erDiagram
 
 | 类型 | 说明 | 示例 |
 |---|---|---|
-| **MENU** | 菜单权限 | `system:user:view` - 用户管理菜单 |
-| **BUTTON** | 按钮权限 | `system:user:create` - 创建用户按钮 |
-| **API** | 接口权限 | `api:user` - 用户相关 API |
+| **MENU** | 菜单权限 | `sys:user:view` - 用户管理菜单 |
+| **BUTTON** | 按钮权限 | `sys:user:create` - 创建用户按钮 |
+| **API** | 接口权限 | `sys:user:list` - 用户列表接口 |
 
 ### 3.4 菜单与权限关系
 

@@ -2,6 +2,7 @@
 配置管理模块
 """
 from typing import List
+from urllib.parse import urlsplit
 from pydantic_settings import BaseSettings
 from pydantic import Field, field_validator
 
@@ -20,7 +21,7 @@ class Settings(BaseSettings):
     
     # 数据库配置
     DATABASE_URL: str = Field(
-        default="mysql+aiomysql://root:password@localhost:3306/yiya_ai_reader",
+        ...,
         description="数据库连接URL"
     )
     DATABASE_ECHO: bool = False
@@ -42,7 +43,7 @@ class Settings(BaseSettings):
     
     # JWT 配置
     SECRET_KEY: str = Field(
-        default="your-secret-key-change-this-in-production",
+        ...,
         description="JWT密钥"
     )
     ALGORITHM: str = "HS256"
@@ -63,6 +64,29 @@ class Settings(BaseSettings):
     # 微信小程序配置
     WECHAT_APPID: str = ""
     WECHAT_SECRET: str = ""
+
+    @field_validator("SECRET_KEY")
+    @classmethod
+    def validate_secret_key(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("SECRET_KEY 不能为空")
+        normalized = value.strip()
+        if normalized in {"your-secret-key-change-this-in-production", "your-secret-key-here"}:
+            raise ValueError("SECRET_KEY 不能使用默认占位值")
+        return normalized
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def validate_database_url(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("DATABASE_URL 不能为空")
+        normalized = value.strip()
+        parsed = urlsplit(normalized)
+        if parsed.username is not None and (parsed.password is None or parsed.password == ""):
+            raise ValueError("DATABASE_URL 必须包含数据库密码")
+        if ":password@" in normalized or "root:password@" in normalized:
+            raise ValueError("DATABASE_URL 不能使用默认密码")
+        return normalized
     
     class Config:
         env_file = ".env"

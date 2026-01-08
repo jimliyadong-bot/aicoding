@@ -7,8 +7,8 @@ services:
     container_name: yiya-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root123456
-      MYSQL_DATABASE: yiya_ai_reader
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?MYSQL_DATABASE is required}
       TZ: Asia/Shanghai
     ports:
       - "3306:3306"
@@ -41,9 +41,10 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: mysql+aiomysql://root:root123456@mysql:3306/yiya_ai_reader
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
     depends_on:
       - mysql
       - redis

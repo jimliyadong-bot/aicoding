@@ -65,7 +65,7 @@ DROP TABLE IF EXISTS admin_permission;
 CREATE TABLE admin_permission (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '权限ID',
     name VARCHAR(50) NOT NULL COMMENT '权限名称',
-    code VARCHAR(100) NOT NULL UNIQUE COMMENT '权限编码(如: system:user:create)',
+    code VARCHAR(100) NOT NULL UNIQUE COMMENT '权限编码(如: sys:user:create)',
     type VARCHAR(20) NOT NULL COMMENT '权限类型: MENU-菜单, BUTTON-按钮, API-接口',
     description VARCHAR(200) COMMENT '权限描述',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -219,42 +219,47 @@ INSERT INTO admin_role (id, name, code, description, status) VALUES
 -- 2. 插入默认权限
 INSERT INTO admin_permission (id, name, code, type, description) VALUES
 -- 系统管理菜单权限
-(1, '系统管理', 'system:manage', 'MENU', '系统管理菜单'),
-(2, '用户管理', 'system:user:view', 'MENU', '用户管理菜单'),
-(3, '角色管理', 'system:role:view', 'MENU', '角色管理菜单'),
-(4, '权限管理', 'system:permission:view', 'MENU', '权限管理菜单'),
-(5, '菜单管理', 'system:menu:view', 'MENU', '菜单管理菜单'),
-(6, '审计日志', 'system:audit:view', 'MENU', '审计日志菜单'),
+(1, '系统管理', 'sys:manage', 'MENU', '系统管理菜单'),
+(2, '用户管理', 'sys:user:view', 'MENU', '用户管理菜单'),
+(3, '角色管理', 'sys:role:view', 'MENU', '角色管理菜单'),
+(4, '权限管理', 'sys:permission:view', 'MENU', '权限管理菜单'),
+(5, '菜单管理', 'sys:menu:view', 'MENU', '菜单管理菜单'),
+(6, '审计日志', 'sys:audit:view', 'MENU', '审计日志菜单'),
 
--- 用户管理按钮权限
-(10, '创建用户', 'system:user:create', 'BUTTON', '创建用户按钮'),
-(11, '更新用户', 'system:user:update', 'BUTTON', '更新用户按钮'),
-(12, '删除用户', 'system:user:delete', 'BUTTON', '删除用户按钮'),
-(13, '重置密码', 'system:user:reset', 'BUTTON', '重置密码按钮'),
+-- 用户管理权限点
+(10, '用户列表', 'sys:user:list', 'API', '用户列表'),
+(11, '用户详情', 'sys:user:detail', 'API', '用户详情'),
+(12, '创建用户', 'sys:user:create', 'BUTTON', '创建用户按钮'),
+(13, '更新用户', 'sys:user:update', 'BUTTON', '更新用户按钮'),
+(14, '删除用户', 'sys:user:delete', 'BUTTON', '删除用户按钮'),
+(15, '重置密码', 'sys:user:reset', 'BUTTON', '重置密码按钮'),
+(16, '分配角色', 'sys:user:assign:role', 'BUTTON', '分配角色按钮'),
 
--- 角色管理按钮权限
-(20, '创建角色', 'system:role:create', 'BUTTON', '创建角色按钮'),
-(21, '更新角色', 'system:role:update', 'BUTTON', '更新角色按钮'),
-(22, '删除角色', 'system:role:delete', 'BUTTON', '删除角色按钮'),
-(23, '分配权限', 'system:role:assign:permission', 'BUTTON', '分配权限按钮'),
-(24, '分配菜单', 'system:role:assign:menu', 'BUTTON', '分配菜单按钮'),
+-- 角色管理权限点
+(20, '角色列表', 'sys:role:list', 'API', '角色列表'),
+(21, '角色详情', 'sys:role:detail', 'API', '角色详情'),
+(22, '创建角色', 'sys:role:create', 'BUTTON', '创建角色按钮'),
+(23, '更新角色', 'sys:role:update', 'BUTTON', '更新角色按钮'),
+(24, '删除角色', 'sys:role:delete', 'BUTTON', '删除角色按钮'),
+(25, '分配权限', 'sys:role:assign:permission', 'BUTTON', '分配权限按钮'),
+(26, '分配菜单', 'sys:role:assign:menu', 'BUTTON', '分配菜单按钮'),
 
--- 权限管理按钮权限
-(30, '创建权限', 'system:permission:create', 'BUTTON', '创建权限按钮'),
-(31, '更新权限', 'system:permission:update', 'BUTTON', '更新权限按钮'),
-(32, '删除权限', 'system:permission:delete', 'BUTTON', '删除权限按钮'),
+-- 权限管理权限点
+(30, '权限列表', 'sys:permission:list', 'API', '权限列表'),
+(31, '权限详情', 'sys:permission:detail', 'API', '权限详情'),
+(32, '创建权限', 'sys:permission:create', 'BUTTON', '创建权限按钮'),
+(33, '更新权限', 'sys:permission:update', 'BUTTON', '更新权限按钮'),
+(34, '删除权限', 'sys:permission:delete', 'BUTTON', '删除权限按钮'),
 
--- 菜单管理按钮权限
-(40, '创建菜单', 'system:menu:create', 'BUTTON', '创建菜单按钮'),
-(41, '更新菜单', 'system:menu:update', 'BUTTON', '更新菜单按钮'),
-(42, '删除菜单', 'system:menu:delete', 'BUTTON', '删除菜单按钮'),
+-- 菜单管理权限点
+(40, '菜单列表', 'sys:menu:list', 'API', '菜单列表'),
+(41, '创建菜单', 'sys:menu:create', 'BUTTON', '创建菜单按钮'),
+(42, '更新菜单', 'sys:menu:update', 'BUTTON', '更新菜单按钮'),
+(43, '删除菜单', 'sys:menu:delete', 'BUTTON', '删除菜单按钮'),
 
--- API权限
-(100, '用户API', 'api:user', 'API', '用户相关API'),
-(101, '角色API', 'api:role', 'API', '角色相关API'),
-(102, '权限API', 'api:permission', 'API', '权限相关API'),
-(103, '菜单API', 'api:menu', 'API', '菜单相关API'),
-(104, '审计日志API', 'api:audit', 'API', '审计日志相关API');
+-- 示例权限点
+(90, '示例查看', 'sys:demo:view', 'API', '示例查看'),
+(91, '示例列表', 'sys:demo:list', 'API', '示例列表');
 
 -- 3. 插入默认菜单(树形结构)
 INSERT INTO admin_menu (id, parent_id, name, path, component, icon, level, sort, hidden, keep_alive, status) VALUES
@@ -279,22 +284,14 @@ SELECT 1, id FROM admin_menu;
 
 -- 6. 管理员角色分配部分权限(排除权限管理和菜单管理)
 INSERT INTO admin_role_permission (role_id, permission_id)
-SELECT 2, id FROM admin_permission 
-WHERE id IN (1, 2, 3, 6, 10, 11, 12, 13, 20, 21, 22, 23, 24, 100, 101, 104);
+SELECT 2, id FROM admin_permission
+WHERE code NOT LIKE 'sys:permission:%'
+  AND code NOT LIKE 'sys:menu:%';
 
 -- 7. 管理员角色分配部分菜单(排除权限管理和菜单管理)
 INSERT INTO admin_role_menu (role_id, menu_id)
 SELECT 2, id FROM admin_menu 
 WHERE id IN (1, 2, 10, 11, 14);
-
--- 8. 插入默认超级管理员用户
--- 密码: admin123 (使用 bcrypt 加密，rounds=12)
--- 注意: 这个哈希值是 'admin123' 的 bcrypt 加密结果
-INSERT INTO admin_user (id, username, password_hash, real_name, status) VALUES
-(1, 'admin', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYzpLaOBzL6', '超级管理员', 1);
-
--- 9. 分配超级管理员角色
-INSERT INTO admin_user_role (user_id, role_id) VALUES (1, 1);
 
 -- ============================================
 -- 字段说明
@@ -325,7 +322,7 @@ INSERT INTO admin_user_role (user_id, role_id) VALUES (1, 1);
 3. admin_permission (权限表)
    - id: 权限唯一标识
    - name: 权限显示名称
-   - code: 权限编码(唯一,如: system:user:create)
+   - code: 权限编码(唯一,如: sys:user:create)
    - type: MENU-菜单权限, BUTTON-按钮权限, API-接口权限
    - description: 权限描述
 
@@ -400,8 +397,7 @@ INSERT INTO admin_user_role (user_id, role_id) VALUES (1, 1);
 - 3 个角色: 超级管理员、管理员、普通用户
 - 30+ 权限点: 涵盖菜单、按钮、API 三种类型
 - 7 个菜单: 1 个仪表盘 + 1 个系统管理 + 5 个子菜单
-- 1 个超级管理员用户: admin/admin123
-- 角色权限关联: 超级管理员拥有所有权限,管理员拥有部分权限
+-- 角色权限关联: 超级管理员拥有所有权限,管理员拥有部分权限
 - 角色菜单关联: 超级管理员可见所有菜单,管理员可见部分菜单
 */
 

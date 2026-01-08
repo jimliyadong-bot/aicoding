@@ -4,6 +4,9 @@
 
 BASE_URL="http://localhost:8000"
 TOKEN=""
+ADMIN_USERNAME="${ADMIN_USERNAME:?ADMIN_USERNAME is required}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}"
+TEST_USER_PASSWORD="${TEST_USER_PASSWORD:?TEST_USER_PASSWORD is required}"
 
 echo "========================================="
 echo "审计日志与安全加固自测脚本"
@@ -14,7 +17,7 @@ echo ""
 echo "[1/5] 测试登录..."
 LOGIN_RESPONSE=$(curl -s -X POST "$BASE_URL/api/v1/admin/auth/login" \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}')
+  -d "{\"username\":\"${ADMIN_USERNAME}\",\"password\":\"${ADMIN_PASSWORD}\"}")
 
 TOKEN=$(echo $LOGIN_RESPONSE | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
 
@@ -55,7 +58,7 @@ CREATE_RESPONSE=$(curl -s -X POST "$BASE_URL/api/v1/admin/users" \
   -d '{
     "username":"test_audit_user",
     "real_name":"测试用户",
-    "password":"123456",
+    "password":"'"${TEST_USER_PASSWORD}"'",
     "status":1
   }')
 

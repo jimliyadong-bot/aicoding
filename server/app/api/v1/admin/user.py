@@ -12,7 +12,7 @@ from app.models.user import AdminUser
 from app.models.role import AdminRole
 from app.schemas.user import UserCreate, UserUpdate, UserResponse, ResetPasswordRequest, AssignRolesRequest
 from app.schemas.response import success_response
-from app.core.dependencies import get_current_user
+from app.core.permissions import require_perm
 from app.core.exceptions import NotFoundException, BadRequestException
 
 router = APIRouter()
@@ -27,7 +27,7 @@ async def get_user_list(
     username: Optional[str] = None,
     real_name: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:list"))
 ):
     """获取用户列表"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -69,7 +69,7 @@ async def create_user(
     request: Request,
     user_data: UserCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:create"))
 ):
     """创建用户"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -105,7 +105,7 @@ async def get_user(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:detail"))
 ):
     """获取用户详情"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -129,7 +129,7 @@ async def update_user(
     id: int,
     user_data: UserUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:update"))
 ):
     """更新用户"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -161,7 +161,7 @@ async def delete_user(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:delete"))
 ):
     """删除用户(软删除)"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -190,7 +190,7 @@ async def reset_password(
     id: int,
     reset_data: ResetPasswordRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:reset"))
 ):
     """重置密码"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -214,7 +214,7 @@ async def assign_roles(
     id: int,
     assign_data: AssignRolesRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:user:assign:role"))
 ):
     """分配角色"""
     trace_id = getattr(request.state, "trace_id", "")

@@ -10,7 +10,7 @@ from app.models.user import AdminUser
 from app.models.permission import AdminPermission
 from app.schemas.permission import PermissionCreate, PermissionUpdate, PermissionResponse
 from app.schemas.response import success_response
-from app.core.dependencies import get_current_user
+from app.core.permissions import require_perm
 from app.core.exceptions import NotFoundException, BadRequestException
 
 router = APIRouter()
@@ -20,7 +20,7 @@ router = APIRouter()
 async def get_permission_list(
     request: Request,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:permission:list"))
 ):
     """获取权限列表"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -39,7 +39,7 @@ async def get_permission_list(
 async def get_permission_tree(
     request: Request,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:permission:list"))
 ):
     """获取权限树(用于角色绑定)"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -60,7 +60,7 @@ async def create_permission(
     request: Request,
     perm_data: PermissionCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:permission:create"))
 ):
     """创建权限"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -93,7 +93,7 @@ async def get_permission(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:permission:detail"))
 ):
     """获取权限详情"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -117,7 +117,7 @@ async def update_permission(
     id: int,
     perm_data: PermissionUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:permission:update"))
 ):
     """更新权限"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -148,7 +148,7 @@ async def delete_permission(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:permission:delete"))
 ):
     """删除权限"""
     trace_id = getattr(request.state, "trace_id", "")

@@ -17,6 +17,7 @@ from app.schemas.response import success_response
 from app.services.auth_service import AuthService
 from app.core.dependencies import get_current_user
 from app.models.user import AdminUser
+from app.services.permission_service import PermissionService
 
 router = APIRouter()
 
@@ -106,9 +107,10 @@ async def get_current_user_info(
     
     # 构建用户信息响应
     user_info = UserInfoResponse.model_validate(current_user)
+    permissions = sorted(PermissionService.get_user_permissions(current_user))
     
     return success_response(
-        data=user_info.model_dump(),
+        data={**user_info.model_dump(), "permissions": permissions},
         message="获取用户信息成功",
         trace_id=trace_id
     )

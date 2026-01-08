@@ -84,8 +84,9 @@ export const useAuthStore = defineStore('auth', () => {
             if (res.code === 200) {
                 user.value = res.data
 
-                // 从用户信息中提取权限(如果后端返回)
-                // permissions.value = res.data.permissions || []
+                if (Array.isArray(res.data.permissions)) {
+                    permissions.value = res.data.permissions
+                }
             }
         } catch (error) {
             console.error('获取用户信息失败:', error)
@@ -131,7 +132,9 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         extract(menuList)
-        permissions.value = perms
+        if (perms.length > 0) {
+            permissions.value = perms
+        }
     }
 
     /**

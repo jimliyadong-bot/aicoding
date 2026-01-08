@@ -77,7 +77,7 @@ npm run dev
 
 **访问**: http://localhost:5173
 
-**默认账号**: admin / admin123
+**管理员账号**: 通过环境变量运行 `python scripts/seed_admin.py` 创建
 
 #### 4. 启动小程序
 
@@ -93,12 +93,14 @@ npm run dev
 
 ```bash
 cd server
+export ADMIN_USERNAME=admin
+export ADMIN_PASSWORD=your-strong-password
 python scripts/seed_admin.py
 ```
 
-**默认账号**:
-- 用户名: admin
-- 密码: admin123
+**管理员账号**:
+- 用户名: $ADMIN_USERNAME
+- 密码: $ADMIN_PASSWORD
 
 ### 2. 初始化权限
 
@@ -133,16 +135,16 @@ python scripts/seed_menus.py
 
 ```env
 # 数据库配置
-DATABASE_URL=mysql+aiomysql://root:password@localhost:3306/yiya_ai_reader
+DATABASE_URL=mysql+aiomysql://root:<db_password>@localhost:3306/yiya_ai_reader
 
 # Redis 配置
 REDIS_URL=redis://localhost:6379/0
 
 # JWT 配置
-JWT_SECRET_KEY=your-secret-key-here
-JWT_ALGORITHM=HS256
-JWT_ACCESS_TOKEN_EXPIRE_MINUTES=120
-JWT_REFRESH_TOKEN_EXPIRE_DAYS=7
+SECRET_KEY=your-strong-secret-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=120
+REFRESH_TOKEN_EXPIRE_DAYS=7
 
 # CORS 配置
 CORS_ORIGINS=["http://localhost:5173"]

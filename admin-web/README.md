@@ -104,7 +104,7 @@ npm run dev
 
 1. 打开浏览器访问 http://localhost:5173
 2. 输入用户名: `admin`
-3. 输入密码: `admin123`
+3. 输入密码: `ADMIN_PASSWORD`
 4. 点击登录
 
 **预期结果**: 

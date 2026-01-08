@@ -72,9 +72,8 @@ npm run dev
 
 管理端将运行在: http://localhost:5173
 
-默认管理员账号:
-- 用户名: `admin`
-- 密码: `admin123`
+管理员账号:
+- 使用 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 环境变量运行 `python scripts/seed_admin.py` 创建
 
 ---
 
@@ -152,7 +151,7 @@ USE yiya_ai_reader;
 # 查看表
 SHOW TABLES;
 
-# 查看默认管理员
+# 查看管理员账号
 SELECT * FROM sys_user;
 ```
 
@@ -171,7 +170,7 @@ PING
 ### 4. 前端访问验证
 
 1. 打开浏览器访问: http://localhost:5173 (开发) 或 http://localhost (Docker)
-2. 使用默认账号登录: `admin` / `admin123`
+2. 使用已创建的管理员账号登录
 3. 验证菜单是否正确显示
 4. 验证用户管理等功能是否正常
 
@@ -261,7 +260,7 @@ pip install -r requirements.txt
 
 ## 生产环境注意事项
 
-1. **修改默认密码**: 修改数据库 root 密码和默认管理员密码
+1. **密码安全**: 修改数据库 root 密码并设置管理员强密码
 2. **修改 SECRET_KEY**: 在 `.env` 中设置强随机密钥
 3. **启用 HTTPS**: 配置 SSL 证书
 4. **配置防火墙**: 只开放必要端口

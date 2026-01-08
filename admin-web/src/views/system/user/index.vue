@@ -36,7 +36,7 @@
         <el-table-column label="操作" width="300" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)" v-perm="'sys:user:update'">编辑</el-button>
-            <el-button type="warning" size="small" @click="handleResetPassword(row)" v-perm="'sys:user:update'">重置密码</el-button>
+            <el-button type="warning" size="small" @click="handleResetPassword(row)" v-perm="'sys:user:reset'">重置密码</el-button>
             <el-button 
               :type="row.status === 1 ? 'danger' : 'success'" 
               size="small" 

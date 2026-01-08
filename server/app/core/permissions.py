@@ -52,7 +52,7 @@ def require_any_perm(*permission_codes: str):
     Example:
         @router.get("/users")
         async def get_users(
-            current_user: AdminUser = Depends(require_any_perm("sys:user:list", "sys:user:view"))
+            current_user: AdminUser = Depends(require_any_perm("sys:user:list", "sys:user:detail"))
         ):
             return {"users": []}
     """
@@ -82,7 +82,7 @@ def require_all_perms(*permission_codes: str):
     Example:
         @router.post("/users")
         async def create_user(
-            current_user: AdminUser = Depends(require_all_perms("sys:user:create", "sys:user:assign"))
+            current_user: AdminUser = Depends(require_all_perms("sys:user:create", "sys:user:assign:role"))
         ):
             return {"message": "创建成功"}
     """

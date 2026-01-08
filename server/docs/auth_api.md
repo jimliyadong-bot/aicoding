@@ -14,7 +14,7 @@
 | `app/core/dependencies.py` | 认证依赖 | 获取当前用户依赖 |
 | `app/api/v1/admin/auth.py` | 认证路由 | 4 个认证接口 |
 | `app/api/v1/admin/__init__.py` | 包初始化 | admin 包 |
-| `scripts/seed_admin.py` | 初始化脚本 | 创建默认管理员 |
+| `scripts/seed_admin.py` | 初始化脚本 | 创建管理员账号 |
 
 ### 修改文件(1 个)
 
@@ -35,28 +35,28 @@
 cd d:\Projects\ai-develop\workspace\antigravity\yiya_ai_reader\server
 
 # 运行初始化脚本
+set ADMIN_USERNAME=admin
+set ADMIN_PASSWORD=your-strong-password
 python scripts\seed_admin.py
 ```
 
-**命令用途**: 创建默认管理员账号(admin/admin123),如果已存在则跳过。
+**命令用途**: 使用 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 环境变量创建管理员账号,如果已存在则跳过。
 
 **预期输出**:
 ```
 开始初始化管理员账号...
-✅ 管理员账号创建成功!
+管理员账号创建成功!
    用户名: admin
-   密码: admin123
    ID: 1
-
-⚠️  请在生产环境中修改默认密码!
+   请妥善保管管理员凭据
 ```
 
 **方式 2: 手动插入数据库**
 
 ```sql
--- 使用 bcrypt 哈希后的密码(admin123)
+-- 使用 bcrypt 哈希后的密码(示例)
 INSERT INTO admin_user (username, password_hash, real_name, status) VALUES
-('admin', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYzpLaOBzL6', '超级管理员', 1);
+('<ADMIN_USERNAME>', '<BCRYPT_PASSWORD_HASH>', '超级管理员', 1);
 ```
 
 ### 步骤 2: 启动服务
@@ -83,7 +83,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```bash
 curl -X POST http://localhost:8000/api/v1/admin/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"username\":\"admin\",\"password\":\"admin123\"}"
+  -d "{\"username\":\"<ADMIN_USERNAME>\",\"password\":\"<ADMIN_PASSWORD>\"}"
 ```
 
 **预期响应**:
@@ -347,7 +347,7 @@ redis-cli FLUSHDB
 
 ## ⚠️ 注意事项
 
-1. **默认密码**: 生产环境必须修改默认密码
+1. **密码安全**: 生产环境必须使用强密码
 2. **SECRET_KEY**: 生产环境必须使用强随机密钥
 3. **HTTPS**: 生产环境必须使用 HTTPS
 4. **Token 过期**: 根据实际需求调整过期时间

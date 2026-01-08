@@ -13,7 +13,7 @@ from app.models.permission import AdminPermission
 from app.models.menu import AdminMenu
 from app.schemas.role import RoleCreate, RoleUpdate, RoleResponse, AssignPermissionsRequest, AssignMenusRequest
 from app.schemas.response import success_response
-from app.core.dependencies import get_current_user
+from app.core.permissions import require_perm
 from app.core.exceptions import NotFoundException, BadRequestException
 
 router = APIRouter()
@@ -23,7 +23,7 @@ router = APIRouter()
 async def get_role_list(
     request: Request,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:list"))
 ):
     """获取角色列表"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -43,7 +43,7 @@ async def create_role(
     request: Request,
     role_data: RoleCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:create"))
 ):
     """创建角色"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -76,7 +76,7 @@ async def get_role(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:detail"))
 ):
     """获取角色详情"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -100,7 +100,7 @@ async def update_role(
     id: int,
     role_data: RoleUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:update"))
 ):
     """更新角色"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -131,7 +131,7 @@ async def delete_role(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:delete"))
 ):
     """删除角色"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -158,7 +158,7 @@ async def get_role_permissions(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:assign:permission"))
 ):
     """获取角色权限"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -182,7 +182,7 @@ async def assign_permissions(
     id: int,
     assign_data: AssignPermissionsRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:assign:permission"))
 ):
     """绑定权限"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -209,7 +209,7 @@ async def get_role_menus(
     request: Request,
     id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:assign:menu"))
 ):
     """获取角色菜单"""
     trace_id = getattr(request.state, "trace_id", "")
@@ -233,7 +233,7 @@ async def assign_menus(
     id: int,
     assign_data: AssignMenusRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: AdminUser = Depends(get_current_user)
+    current_user: AdminUser = Depends(require_perm("sys:role:assign:menu"))
 ):
     """绑定菜单"""
     trace_id = getattr(request.state, "trace_id", "")
