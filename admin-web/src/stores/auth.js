@@ -150,14 +150,20 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (error) {
             console.error('登出失败:', error)
         } finally {
-            // 清除状态
-            token.value = ''
-            refreshTokenValue.value = ''
-            user.value = null
-            permissions.value = []
-            menus.value = []
-            clearAuth()
+            resetAuthState()
         }
+    }
+
+    /**
+     * 清理本地认证状态(不调用接口)
+     */
+    function resetAuthState() {
+        token.value = ''
+        refreshTokenValue.value = ''
+        user.value = null
+        permissions.value = []
+        menus.value = []
+        clearAuth()
     }
 
     /**
@@ -184,6 +190,7 @@ export const useAuthStore = defineStore('auth', () => {
         getUserInfo,
         getMenus,
         logout,
+        resetAuthState,
         hasPermission
     }
 })

@@ -76,11 +76,7 @@ request.interceptors.response.use(
                 } catch (refreshError) {
                     // 刷新失败,清除登录状态并跳转登录页
                     const authStore = useAuthStore()
-                    authStore.logout()
-
-                    // 拒绝所有待处理的请求
-                    requests.forEach(({ reject }) => reject(refreshError))
-                    requests = []
+                    authStore.resetAuthState()
 
                     // 拒绝所有待处理的请求
                     requests.forEach(({ reject }) => reject(refreshError))

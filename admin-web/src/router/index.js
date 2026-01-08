@@ -38,9 +38,12 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.path === '/login') {
         // 已登录则跳转到首页
-        if (token) {
+        if (token && authStore.refreshTokenValue) {
             next('/')
         } else {
+            if (token || authStore.refreshTokenValue) {
+                authStore.resetAuthState()
+            }
             next()
         }
     } else {
